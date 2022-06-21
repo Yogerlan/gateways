@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS gateways (
+    uuid TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    ipv4 TEXT NOT NULL);
+
+CREATE TABLE IF NOT EXISTS devices (
+    uid INTEGER PRIMARY KEY,
+    vendor TEXT NOT NULL,
+    created TEXT DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'offline',
+    gateway_uuid TEXT REFERENCES gateways(uuid) ON DELETE CASCADE ON UPDATE CASCADE);
