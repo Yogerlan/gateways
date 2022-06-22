@@ -1,0 +1,207 @@
+<div class="container-fluid my-3">
+    <div class="d-flex justify-content-between">
+        <h2>Devices</h2>
+        <button class="btn btn-outline-dark" (click)="addDevice()">
+            <i class="bi bi-plus"></i>
+            Add
+        </button>
+    </div>
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Vendor</th>
+                <th scope="col">Created</th>
+                <th scope="col">Status</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let device of devices">
+                <th scope="row">{{ device.vendor }}</th>
+                <td>{{ device.created }}</td>
+                <td>{{ device.status }}</td>
+                <td>{{ device.gateway_uuid }}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="actions">
+                        <button type="button" class="btn btn-light" (click)="showDevice(device.uid)">
+                            <em class="bi bi-arrows-angle-expand"></em>
+                        </button>
+                        <button type="button" class="btn btn-light" (click)="editDevice(device.uid)">
+                            <em class="bi bi-pencil-square"></em>
+                        </button>
+                        <button type="button" class="btn btn-light" (click)="dropDevice(device.uid)">
+                            <em class="bi bi-trash3"></em>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="addDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add device</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Properties</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Vendor</th>
+                            <td>
+                                <input id="addDeviceVendor" type="text" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Status</th>
+                            <td>
+                                <select id="addDeviceStatus" class="form-select" aria-label="Select status">
+                                    <option value="offline">Offline</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Gateway</th>
+                            <td>
+                                <select id="addDeviceGatewayUUID" class="form-control" aria-label="Select gateway">
+                                    <option [value]="gateway.uuid" *ngFor="let gateway of gateways">
+                                        {{ gateway.name }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="storeDevice()">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Device details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Properties</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr *ngFor="let property of properties">
+                            <th scope="row">{{ property.label }}</th>
+                            <td>{{ property.value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h6 class="mt-3">Gateway</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr *ngFor="let property of gateway_properties">
+                            <th scope="row">{{ property.label }}</th>
+                            <td>{{ property.value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit device</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="editDeviceUID" type="hidden">
+                <h6>Properties</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Vendor</th>
+                            <td>
+                                <input id="editDeviceVendor" type="text" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Status</th>
+                            <td>
+                                <select id="editDeviceStatus" class="form-select" aria-label="Select status">
+                                    <option value="offline">Offline</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Gateway</th>
+                            <td>
+                                <select id="editDeviceGatewayUUID" class="form-control" aria-label="Select gateway">
+                                    <option [value]="gateway.uuid" *ngFor="let gateway of gateways">
+                                        {{ gateway.name }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateDevice()">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dropDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Drop device</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="dropDeviceUID" type="hidden">
+                <h6>Caution! The selected peripheral device data will be lost.</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                    (click)="deleteDevice()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="msgToast" class="toast align-items-center text-bg-dark" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ toast.msg }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>

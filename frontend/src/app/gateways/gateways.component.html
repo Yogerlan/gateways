@@ -1,0 +1,188 @@
+<div class="container-fluid my-3">
+    <div class="d-flex justify-content-between">
+        <h2>Gateways</h2>
+        <button class="btn btn-outline-dark" (click)="addGateway()">
+            <i class="bi bi-plus"></i>
+            Add
+        </button>
+    </div>
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th scope="col">UUID</th>
+                <th scope="col">Name</th>
+                <th scope="col">IPv4</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let gateway of gateways">
+                <th scope="row">{{ gateway.uuid }}</th>
+                <td>{{ gateway.name }}</td>
+                <td>{{ gateway.ipv4 }}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="actions">
+                        <button type="button" class="btn btn-light" (click)="showGateway(gateway.uuid)">
+                            <em class="bi bi-arrows-angle-expand"></em>
+                        </button>
+                        <button type="button" class="btn btn-light" (click)="editGateway(gateway.uuid)">
+                            <em class="bi bi-pencil-square"></em>
+                        </button>
+                        <button type="button" class="btn btn-light" (click)="dropGateway(gateway.uuid)">
+                            <em class="bi bi-trash3"></em>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="addGatewayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add gateway</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Properties</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>
+                                <input id="addGatewayName" type="text" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">IPv4</th>
+                            <td>
+                                <input id="addGatewayIPv4" type="text" class="form-control">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="storeGateway()">
+                    Save changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showGatewayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Gateway details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Properties</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr *ngFor="let property of properties">
+                            <th scope="row">{{ property.label }}</th>
+                            <td>{{ property.value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h6 class="mt-3">Devices</h6>
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Vendor</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let device of devices">
+                            <th scope="row">{{ device.vendor }}</th>
+                            <td>{{ device.status }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editGatewayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit gateway</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Properties</h6>
+                <table class="table align-middle">
+                    <tbody>
+                        <tr>
+                            <th scope="row">UUID</th>
+                            <td>
+                                <input id="editGatewayUUID" type="text" class="form-control-plaintext" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Name</th>
+                            <td>
+                                <input id="editGatewayName" type="text" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">IPv4</th>
+                            <td>
+                                <input id="editGatewayIPv4" type="text" class="form-control">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateGateway()">Save
+                    changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dropGatewayModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Drop gateway</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="dropGatewayUUID" type="hidden">
+                <h6>Caution! The selected gateway and the associated peripheral devices data will be lost.</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteGateway()">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="msgToast" class="toast align-items-center text-bg-dark" role="alert" aria-live="assertive"
+        aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ toast.msg }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
