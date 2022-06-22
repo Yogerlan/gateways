@@ -14,4 +14,4 @@ ng build
 echo Finish!!!
 echo
 echo Run start.bash to start local expressjs server.
-echo Open browser at http://127.0.0.1:3000 to access the application.
+echo Open the browser at http://localhost:3000/ to access the application.
